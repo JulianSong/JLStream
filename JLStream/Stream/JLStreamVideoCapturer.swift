@@ -61,6 +61,7 @@ class JLStreamVideoCapturer: NSObject,AVCaptureVideoDataOutputSampleBufferDelega
         self.captureSession.startRunning()
     }
     
+    // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
     
      func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         print(sampleBuffer)

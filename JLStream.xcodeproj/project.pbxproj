@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B90FACB91FE6A5960039D462 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B90FACB81FE6A58E0039D462 /* AVFoundation.framework */; };
+		B90FACBB1FE6A5A70039D462 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B90FACBA1FE6A59F0039D462 /* VideoToolbox.framework */; };
 		B94C396126A98B85A6EFB768 /* Pods_JLStream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2BF54A987AF1402A41C5BD9 /* Pods_JLStream.framework */; };
 		B9D407C81FE5158C0059104D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D407C71FE5158C0059104D /* AppDelegate.swift */; };
 		B9D407CA1FE5158C0059104D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D407C91FE5158C0059104D /* ViewController.swift */; };
@@ -22,6 +24,8 @@
 
 /* Begin PBXFileReference section */
 		A4D63E5911C7EDB2E1BEA63E /* Pods-JLStream.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JLStream.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JLStream/Pods-JLStream.debug.xcconfig"; sourceTree = "<group>"; };
+		B90FACB81FE6A58E0039D462 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		B90FACBA1FE6A59F0039D462 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
 		B9D407C41FE5158C0059104D /* JLStream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JLStream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9D407C71FE5158C0059104D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B9D407C91FE5158C0059104D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -43,6 +47,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B90FACBB1FE6A5A70039D462 /* VideoToolbox.framework in Frameworks */,
+				B90FACB91FE6A5960039D462 /* AVFoundation.framework in Frameworks */,
 				B94C396126A98B85A6EFB768 /* Pods_JLStream.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -53,6 +59,8 @@
 		052989357606F52A2675E211 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B90FACBA1FE6A59F0039D462 /* VideoToolbox.framework */,
+				B90FACB81FE6A58E0039D462 /* AVFoundation.framework */,
 				F2BF54A987AF1402A41C5BD9 /* Pods_JLStream.framework */,
 			);
 			name = Frameworks;
