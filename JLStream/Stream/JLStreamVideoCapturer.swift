@@ -17,10 +17,11 @@ class JLStreamVideoCapturer: NSObject,AVCaptureVideoDataOutputSampleBufferDelega
     let videoQueue = DispatchQueue.init(label: "JLStreamVideoCapturer.videoQueue");
     var connection:AVCaptureConnection?
     var captureDevice:AVCaptureDevice?
+    let encoder = JLStreamDataEncoder.init();
     init(withView view:UIView) {
         super.init()
         if (self.captureSession.canSetSessionPreset(AVCaptureSession.Preset.high)) {
-            self.captureSession.sessionPreset = .iFrame1280x720
+            self.captureSession.sessionPreset = .high
         }
         self.captureDevice = self.getDevice(position: .back)
         if (self.captureDevice  != nil) {
@@ -46,6 +47,7 @@ class JLStreamVideoCapturer: NSObject,AVCaptureVideoDataOutputSampleBufferDelega
             self.capturePreviewLayer?.frame = view.frame;
             view.layer.addSublayer(self.capturePreviewLayer!);
         }
+        self.encoder.createVTSession()
     }
     
     func getDevice(position:AVCaptureDevice.Position) ->AVCaptureDevice?  {
@@ -64,10 +66,11 @@ class JLStreamVideoCapturer: NSObject,AVCaptureVideoDataOutputSampleBufferDelega
     // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
     
      func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        print(sampleBuffer)
+//        print(sampleBuffer)
     }
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        print(sampleBuffer)
+//        print(sampleBuffer)
+        self.encoder.encode(sampleBuffer)
     }
 }

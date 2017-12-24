@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B90FACB91FE6A5960039D462 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B90FACB81FE6A58E0039D462 /* AVFoundation.framework */; };
 		B90FACBB1FE6A5A70039D462 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B90FACBA1FE6A59F0039D462 /* VideoToolbox.framework */; };
+		B93552B51FEE8ED900AD2DAF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B93552B41FEE8ED900AD2DAF /* libz.tbd */; };
 		B94C396126A98B85A6EFB768 /* Pods_JLStream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2BF54A987AF1402A41C5BD9 /* Pods_JLStream.framework */; };
 		B9D407C81FE5158C0059104D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D407C71FE5158C0059104D /* AppDelegate.swift */; };
 		B9D407CA1FE5158C0059104D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D407C91FE5158C0059104D /* ViewController.swift */; };
@@ -20,12 +21,15 @@
 		B9D407E11FE51F670059104D /* JLStreamAudioCapturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D407E01FE51F670059104D /* JLStreamAudioCapturer.swift */; };
 		B9D407E31FE51FAE0059104D /* JLStreamDataEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D407E21FE51FAE0059104D /* JLStreamDataEncoder.swift */; };
 		B9D407E51FE5200A0059104D /* JLStreamRTMPEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D407E41FE5200A0059104D /* JLStreamRTMPEngine.swift */; };
+		B9DB10561FEE86F80088DFD3 /* librtmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9DB10541FEE86F70088DFD3 /* librtmp.framework */; };
+		B9DB10571FEE86F80088DFD3 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9DB10551FEE86F80088DFD3 /* openssl.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A4D63E5911C7EDB2E1BEA63E /* Pods-JLStream.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JLStream.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JLStream/Pods-JLStream.debug.xcconfig"; sourceTree = "<group>"; };
 		B90FACB81FE6A58E0039D462 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		B90FACBA1FE6A59F0039D462 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		B93552B41FEE8ED900AD2DAF /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		B9D407C41FE5158C0059104D /* JLStream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JLStream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9D407C71FE5158C0059104D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B9D407C91FE5158C0059104D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -38,6 +42,10 @@
 		B9D407E01FE51F670059104D /* JLStreamAudioCapturer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JLStreamAudioCapturer.swift; sourceTree = "<group>"; };
 		B9D407E21FE51FAE0059104D /* JLStreamDataEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JLStreamDataEncoder.swift; sourceTree = "<group>"; };
 		B9D407E41FE5200A0059104D /* JLStreamRTMPEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JLStreamRTMPEngine.swift; sourceTree = "<group>"; };
+		B9DB104F1FEE79420088DFD3 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = openssl.framework; path = "../../../../Downloads/OpenSSL-for-iPhone/openssl.framework"; sourceTree = "<group>"; };
+		B9DB10541FEE86F70088DFD3 /* librtmp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = librtmp.framework; sourceTree = "<group>"; };
+		B9DB10551FEE86F80088DFD3 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openssl.framework; sourceTree = "<group>"; };
+		B9DB10581FEE87E50088DFD3 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		C7D9A9C7E5CC6191AC48D88A /* Pods-JLStream.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JLStream.release.xcconfig"; path = "Pods/Target Support Files/Pods-JLStream/Pods-JLStream.release.xcconfig"; sourceTree = "<group>"; };
 		F2BF54A987AF1402A41C5BD9 /* Pods_JLStream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JLStream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -47,9 +55,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9DB10571FEE86F80088DFD3 /* openssl.framework in Frameworks */,
+				B93552B51FEE8ED900AD2DAF /* libz.tbd in Frameworks */,
 				B90FACBB1FE6A5A70039D462 /* VideoToolbox.framework in Frameworks */,
 				B90FACB91FE6A5960039D462 /* AVFoundation.framework in Frameworks */,
 				B94C396126A98B85A6EFB768 /* Pods_JLStream.framework in Frameworks */,
+				B9DB10561FEE86F80088DFD3 /* librtmp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +70,8 @@
 		052989357606F52A2675E211 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B93552B41FEE8ED900AD2DAF /* libz.tbd */,
+				B9DB104F1FEE79420088DFD3 /* openssl.framework */,
 				B90FACBA1FE6A59F0039D462 /* VideoToolbox.framework */,
 				B90FACB81FE6A58E0039D462 /* AVFoundation.framework */,
 				F2BF54A987AF1402A41C5BD9 /* Pods_JLStream.framework */,
@@ -78,6 +91,9 @@
 		B9D407BB1FE5158C0059104D = {
 			isa = PBXGroup;
 			children = (
+				B9DB10581FEE87E50088DFD3 /* Bridging-Header.h */,
+				B9DB10541FEE86F70088DFD3 /* librtmp.framework */,
+				B9DB10551FEE86F80088DFD3 /* openssl.framework */,
 				B9D407C61FE5158C0059104D /* JLStream */,
 				B9D407C51FE5158C0059104D /* Products */,
 				1A36288AC8CB7A07F7D146D2 /* Pods */,
@@ -402,11 +418,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 555BPZM993;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = JLStream/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.julian.JLStream;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -419,11 +441,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 555BPZM993;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = JLStream/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.julian.JLStream;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -7,5 +7,5 @@ target 'JLStream' do
 
   # Pods for JLStream
   #pod "IAMediaRecorder",path:"/Users/Julian/dev/MediaRecord/IAMediaRecorder_GPBroadcast.podspec"
-
+#  pod 'librtmp-iOS', '1.1.0'
 end
