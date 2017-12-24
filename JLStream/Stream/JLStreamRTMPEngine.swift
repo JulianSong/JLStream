@@ -5,6 +5,7 @@
 //  Created by Julian.Song on 2017/12/16.
 //  Copyright © 2017年 Junliang Song. All rights reserved.
 //http://www.qingpingshan.com/rjbc/ios/339004.html
+//http://www.voidcn.com/article/p-dbegjdij-ov.html
 
 import UIKit
 import VideoToolbox
@@ -33,35 +34,72 @@ class JLStreamRTMPEngine: NSObject {
         }
     }
     
-    fileprivate var NALUHeader: [UInt8] = [0, 0, 0, 1]
-    func send(spsData:NSData,ppsData:NSData) {
-        self.sendQueue.sync {
-            let spsFullData: NSMutableData = NSMutableData(bytes: NALUHeader, length: NALUHeader.count)
-            spsFullData.append(spsData.bytes, length: spsData.length)
-            RTMP_Write(self.rtmp,UnsafePointer<Int8>(OpaquePointer(spsFullData.bytes)),Int32(spsFullData.length))
-            let ppsFullData: NSMutableData = NSMutableData(bytes: NALUHeader, length: NALUHeader.count)
-            ppsFullData.append(ppsData.bytes, length: ppsData.length)
-            RTMP_Write(self.rtmp,UnsafePointer<Int8>(OpaquePointer(ppsFullData.bytes)),Int32(ppsFullData.length))
-//            var packet:UnsafeMutablePointer<RTMPPacket>!
-//            RTMPPacket_Alloc(packet, 1024*64)
-//            RTMPPacket_Reset(packet);
-//            packet.pointee.m_hasAbsTimestamp = 0
-//            packet.pointee.m_nChannel = 0x04
-//            packet.pointee.m_nInfoField2 = self.rtmp.pointee.m_stream_id
-//            RTMP_SendPacket(self.rtmp, packet, 0)
-            
-            
+    func reconnect() {
+        if RTMP_Connect(self.rtmp,nil) == 0{
+            print("rtmp 无法链接");
+        }
+        
+        if RTMP_ConnectStream(self.rtmp,0) == 0{
+            print("rtmp strem 无法链接");
         }
     }
     
-    func send(_ data:NSData, isKeyFrame:Bool){
+    fileprivate var NALUHeader: [UInt8] = [0, 0, 0, 1]
+    func send(spsData:NSData,ppsData:NSData) {
         self.sendQueue.sync {
-            let headerData: NSMutableData = NSMutableData(bytes: NALUHeader, length: NALUHeader.count)
-            headerData.append(data.bytes, length: data.length)
-            RTMP_Write(self.rtmp,UnsafePointer<Int8>(OpaquePointer(headerData.bytes)),Int32(headerData.length))
-//            if  RTMP_Write(self.rtmp,UnsafePointer<Int8>(OpaquePointer(data.bytes)),Int32(data.length)) == 0 {
-//                print("rtmp RTMP_Write");
-//            }
+            let fullData: NSMutableData = NSMutableData(bytes: NALUHeader, length: NALUHeader.count)
+            fullData.append(spsData.bytes, length: spsData.length)
+            fullData.append(NALUHeader, length: NALUHeader.count)
+            fullData.append(ppsData.bytes, length: ppsData.length)
+            if RTMP_IsConnected(self.rtmp) == 1{
+                var packet:RTMPPacket =  RTMPPacket.init(m_headerType:  UInt8(RTMP_PACKET_SIZE_MEDIUM),
+                                                         m_packetType: UInt8(RTMP_PACKET_TYPE_VIDEO),
+                                                         m_hasAbsTimestamp: 0,
+                                                         m_nChannel: 0x04,
+                                                         m_nTimeStamp:0,
+                                                         m_nInfoField2: self.rtmp.pointee.m_stream_id,
+                                                         m_nBodySize: UInt32(fullData.length),
+                                                         m_nBytesRead: 0,
+                                                         m_chunk: nil,
+                                                         m_body: UnsafeMutablePointer<Int8>(OpaquePointer(fullData.bytes)))
+                if RTMP_SendPacket(self.rtmp,UnsafeMutablePointer<RTMPPacket>(&packet), 0) == 1{
+                    
+                }else{
+                    print("send sps pps error \(packet)")
+                }
+            }else{
+            
+                print("rtmp not connect")
+            }
+        }
+    }
+    
+    func send(_ data:NSData, isKeyFrame:Bool, timeStamp:UInt32){
+        self.sendQueue.sync {
+            let fullData: NSMutableData = NSMutableData(bytes: NALUHeader, length: NALUHeader.count)
+            fullData.append(data.bytes, length: data.length)
+            if RTMP_IsConnected(self.rtmp) == 1{
+                var packet:RTMPPacket =  RTMPPacket.init(m_headerType:  UInt8(RTMP_PACKET_SIZE_LARGE),
+                                                         m_packetType: UInt8(RTMP_PACKET_TYPE_VIDEO),
+                                                         m_hasAbsTimestamp: 0,
+                                                         m_nChannel: 0x04,
+                                                         m_nTimeStamp: timeStamp * 100,
+                                                         m_nInfoField2: self.rtmp.pointee.m_stream_id,
+                                                         m_nBodySize: UInt32(fullData.length),
+                                                         m_nBytesRead: 0,
+                                                         m_chunk: nil,
+                                                         m_body: UnsafeMutablePointer<Int8>(OpaquePointer(fullData.bytes)))
+        
+                if RTMP_SendPacket(self.rtmp,UnsafeMutablePointer<RTMPPacket>(&packet), 0) == 1{
+                    
+                    
+                }else{
+                    print("send idr error \(packet)")
+                }
+            }else {
+
+                print("rtmp not connect")
+            }
         }
     }
 }

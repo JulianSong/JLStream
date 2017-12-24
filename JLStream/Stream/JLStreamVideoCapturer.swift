@@ -14,7 +14,7 @@ class JLStreamVideoCapturer: NSObject,AVCaptureVideoDataOutputSampleBufferDelega
     var captureDeviceInput:AVCaptureDeviceInput?
     let captureOutput:AVCaptureVideoDataOutput = AVCaptureVideoDataOutput.init()
     var capturePreviewLayer:AVCaptureVideoPreviewLayer?
-    let videoQueue = DispatchQueue.init(label: "JLStreamVideoCapturer.videoQueue");
+    let videoCapturerQueue = DispatchQueue.init(label: "JLStream.videoCapturerQueue");
     var connection:AVCaptureConnection?
     var captureDevice:AVCaptureDevice?
     let encoder = JLStreamDataEncoder.init();
@@ -33,7 +33,7 @@ class JLStreamVideoCapturer: NSObject,AVCaptureVideoDataOutputSampleBufferDelega
             
             if (self.captureSession.canAddOutput(self.captureOutput)) {
                 self.captureOutput.alwaysDiscardsLateVideoFrames = true
-                self.captureOutput.setSampleBufferDelegate(self, queue: self.videoQueue)
+                self.captureOutput.setSampleBufferDelegate(self, queue: self.videoCapturerQueue)
                 self.captureOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String:kCVPixelFormatType_420YpCbCr8BiPlanarFullRange]
                 
                 self.captureSession.addOutput(self.captureOutput)
@@ -46,8 +46,8 @@ class JLStreamVideoCapturer: NSObject,AVCaptureVideoDataOutputSampleBufferDelega
             self.capturePreviewLayer?.videoGravity = .resizeAspectFill;
             self.capturePreviewLayer?.frame = view.frame;
             view.layer.addSublayer(self.capturePreviewLayer!);
+            self.encoder.createVTSession()
         }
-        self.encoder.createVTSession()
     }
     
     func getDevice(position:AVCaptureDevice.Position) ->AVCaptureDevice?  {

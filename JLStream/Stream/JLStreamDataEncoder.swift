@@ -41,19 +41,18 @@ func compressionOutputCallback(outputCallbackRefCon: UnsafeMutableRawPointer?,
         print("sampleBuffer data is not ready")
         return
     }
-    print(sampleBuffer)
     
     let encoder:JLStreamDataEncoder = Unmanaged.fromOpaque(outputCallbackRefCon!).takeUnretainedValue()
     
     let attachmentsArray:CFArray = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, false)!
-    var keyFrame = false
+    var isKeyFrame = false
     if  CFArrayGetCount(attachmentsArray) > 0{
         let rawDic: UnsafeRawPointer = CFArrayGetValueAtIndex(attachmentsArray, 0)
         let dict: CFDictionary = Unmanaged.fromOpaque(rawDic).takeUnretainedValue()
-        keyFrame = CFDictionaryContainsKey(dict,Unmanaged.passUnretained(kCMSampleAttachmentKey_NotSync).toOpaque())
+        isKeyFrame = CFDictionaryContainsKey(dict,Unmanaged.passUnretained(kCMSampleAttachmentKey_NotSync).toOpaque())
     }
     
-    if keyFrame {
+    if isKeyFrame {
         let format = CMSampleBufferGetFormatDescription(sampleBuffer)
         var spsSize: Int = 0
         var spsCount: Int = 0
@@ -80,6 +79,10 @@ func compressionOutputCallback(outputCallbackRefCon: UnsafeMutableRawPointer?,
     var lengthAtOffset: Int = 0
     var totalLength: Int = 0
     var dataPointer: UnsafeMutablePointer<Int8>?
+    let presentationTimestamp = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
+    
+    let timeStamp:Int64 =  Int64(presentationTimestamp.value) / Int64(presentationTimestamp.timescale)
+    print("timeStamp is \(timeStamp)")
     if CMBlockBufferGetDataPointer(dataBuffer, 0, &lengthAtOffset, &totalLength, &dataPointer) == noErr {
         var bufferOffset: Int = 0
         let AVCCHeaderLength = 4
@@ -90,7 +93,7 @@ func compressionOutputCallback(outputCallbackRefCon: UnsafeMutableRawPointer?,
             // big endian to host endian. in iOS it's little endian
             NALUnitLength = CFSwapInt32BigToHost(NALUnitLength)
             let data: NSData = NSData(bytes: dataPointer?.advanced(by: bufferOffset + AVCCHeaderLength), length: Int(NALUnitLength))
-            encoder.rtmp.send(data,isKeyFrame:keyFrame)
+            encoder.rtmp.send(data,isKeyFrame:isKeyFrame,timeStamp:UInt32(timeStamp))
             // move forward to the next NAL Unit
             bufferOffset += Int(AVCCHeaderLength)
             bufferOffset += Int(NALUnitLength)
@@ -102,8 +105,6 @@ class JLStreamDataEncoder: NSObject{
     var session:VTCompressionSession?
     let encodeQueue = DispatchQueue.init(label: "JLStream.encodeQueue")
     let rtmp = JLStreamRTMPEngine.init()
-//    let compressionOutputCallback:VTCompressionOutputCallback =  {(outputCallbackRefCon:UnsafeMutableRawPointer?, sourceFrameRefCon:UnsafeMutableRawPointer?, status:OSStatus, infoFlags:VTEncodeInfoFlags, sampleBuffer:CMSampleBuffer?) -> Void in
-//    }
     func createVTSession()  {
         let width = 320
         let height = 200
@@ -117,19 +118,23 @@ class JLStreamDataEncoder: NSObject{
             // 比特率和速率
             VTSessionSetProperty(self.session!, kVTCompressionPropertyKey_AverageBitRate, width * height * 2 * 32 as CFTypeRef)
             VTSessionSetProperty(self.session!, kVTCompressionPropertyKey_DataRateLimits, [width * height * 2 * 4, 1] as CFArray)
+            VTCompressionSessionPrepareToEncodeFrames(self.session!)
+            self.rtmp.crete()
+        }else{
+            
         }
-        self.rtmp.crete()
+        
     }
     
     func encode(_ sampleBuffer:CMSampleBuffer){
         self.encodeQueue.sync {
-            VTCompressionSessionPrepareToEncodeFrames(self.session!)
             var encodeInfoFlags:VTEncodeInfoFlags = .asynchronous
             let imgaeBuffer:CVImageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
 //            let presentationTimestamp = CMTime.init(value: 20, timescale: 30)
             let presentationTimestamp = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
             let duration = CMSampleBufferGetOutputDuration(sampleBuffer)
             VTCompressionSessionEncodeFrame(self.session!,imgaeBuffer,presentationTimestamp,duration,nil,nil,&encodeInfoFlags)
+            
         }
     }
 }
