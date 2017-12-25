@@ -93,7 +93,7 @@ func compressionOutputCallback(outputCallbackRefCon: UnsafeMutableRawPointer?,
             // big endian to host endian. in iOS it's little endian
             NALUnitLength = CFSwapInt32BigToHost(NALUnitLength)
             let data: NSData = NSData(bytes: dataPointer?.advanced(by: bufferOffset + AVCCHeaderLength), length: Int(NALUnitLength))
-            encoder.rtmp.send(data,isKeyFrame:isKeyFrame,timeStamp:UInt32(timeStamp))
+            encoder.rtmp.send(data,isKeyFrame:isKeyFrame,timeStamp:UInt32(timeStamp * 1000))
             // move forward to the next NAL Unit
             bufferOffset += Int(AVCCHeaderLength)
             bufferOffset += Int(NALUnitLength)
@@ -110,7 +110,9 @@ class JLStreamDataEncoder: NSObject{
         let height = 200
         let status:OSStatus = VTCompressionSessionCreate(kCFAllocatorDefault,Int32(width),Int32(height), kCMVideoCodecType_H264,nil, nil, nil,compressionOutputCallback,Unmanaged.passUnretained(self).toOpaque(), &self.session)
         if status == noErr {
-            VTSessionSetProperty(self.session!, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Main_AutoLevel)
+            
+            VTSessionSetProperty(self.session!, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
+            VTSessionSetProperty(self.session!, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_High_AutoLevel)
             // capture from camera, so it's real time
             VTSessionSetProperty(self.session!, kVTCompressionPropertyKey_RealTime, kCFBooleanTrue)
             // 关键帧间隔
@@ -126,15 +128,37 @@ class JLStreamDataEncoder: NSObject{
         
     }
     
+    public enum LockFlag {
+        case readwrite
+        case readonly
+        
+        func flag() -> CVPixelBufferLockFlags {
+            switch self {
+            case .readonly:
+                return .readOnly
+            default:
+                return CVPixelBufferLockFlags.init(rawValue: 0)
+            }
+        }
+    }
+    
     func encode(_ sampleBuffer:CMSampleBuffer){
         self.encodeQueue.sync {
-            var encodeInfoFlags:VTEncodeInfoFlags = .asynchronous
-            let imgaeBuffer:CVImageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
-//            let presentationTimestamp = CMTime.init(value: 20, timescale: 30)
-            let presentationTimestamp = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
-            let duration = CMSampleBufferGetOutputDuration(sampleBuffer)
-            VTCompressionSessionEncodeFrame(self.session!,imgaeBuffer,presentationTimestamp,duration,nil,nil,&encodeInfoFlags)
             
+            guard let imgaeBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+                return
+            }
+            let encodeInfoFlags = UnsafeMutablePointer<VTEncodeInfoFlags>.allocate(capacity: 1)
+            if CVPixelBufferLockBaseAddress(imgaeBuffer,CVPixelBufferLockFlags.init(rawValue: 0)) == kCVReturnSuccess {
+                //            let presentationTimestamp = CMTime.init(value: 20, timescale: 30)
+                let presentationTimestamp = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
+//                let duration = CMSampleBufferGetOutputDuration(sampleBuffer)
+                VTCompressionSessionEncodeFrame(self.session!,imgaeBuffer,presentationTimestamp,kCMTimeInvalid,nil,nil,encodeInfoFlags)
+//                VTCompressionSessionCompleteFrames(self.session!, kCMTimeInvalid)
+            }
+            CVPixelBufferUnlockBaseAddress(imgaeBuffer,CVPixelBufferLockFlags.init(rawValue: 0))
+
+        
         }
     }
 }

@@ -52,18 +52,30 @@ class JLStreamRTMPEngine: NSObject {
             fullData.append(NALUHeader, length: NALUHeader.count)
             fullData.append(ppsData.bytes, length: ppsData.length)
             if RTMP_IsConnected(self.rtmp) == 1{
-                var packet:RTMPPacket =  RTMPPacket.init(m_headerType:  UInt8(RTMP_PACKET_SIZE_MEDIUM),
-                                                         m_packetType: UInt8(RTMP_PACKET_TYPE_VIDEO),
-                                                         m_hasAbsTimestamp: 0,
-                                                         m_nChannel: 0x04,
-                                                         m_nTimeStamp:0,
-                                                         m_nInfoField2: self.rtmp.pointee.m_stream_id,
-                                                         m_nBodySize: UInt32(fullData.length),
-                                                         m_nBytesRead: 0,
-                                                         m_chunk: nil,
-                                                         m_body: UnsafeMutablePointer<Int8>(OpaquePointer(fullData.bytes)))
-                if RTMP_SendPacket(self.rtmp,UnsafeMutablePointer<RTMPPacket>(&packet), 0) == 1{
-                    
+
+//                var packet:RTMPPacket =  RTMPPacket.init(m_headerType:  UInt8(RTMP_PACKET_SIZE_LARGE)
+//                                                        m_packetType: UInt8(RTMP_PACKET_TYPE_VIDEO),
+//                                                         m_hasAbsTimestamp: 0,
+//                                                         m_nChannel: 0x04,
+//                                                         m_nTimeStamp: timeStamp * 100,
+//                                                         m_nInfoField2: self.rtmp.pointee.m_stream_id,
+//                                                         m_nBodySize: UInt32(fullData.length),
+//                                                         m_nBytesRead: 0,
+//                                                         m_chunk: nil,
+//                                                         m_body: UnsafeMutablePointer<Int8>(OpaquePointer(fullData.bytes)))
+            
+                let packet = UnsafeMutablePointer<RTMPPacket>.allocate(capacity: 1)
+                RTMPPacket_Alloc(packet,1024*64)
+                RTMPPacket_Reset(packet)
+                packet.pointee.m_headerType = UInt8(RTMP_PACKET_SIZE_MEDIUM)
+                packet.pointee.m_packetType = UInt8(RTMP_PACKET_TYPE_VIDEO)
+                packet.pointee.m_hasAbsTimestamp = 0
+                packet.pointee.m_nInfoField2 = self.rtmp.pointee.m_stream_id
+                packet.pointee.m_nChannel = 0x04
+                packet.pointee.m_nBodySize = UInt32(fullData.length)
+                packet.pointee.m_body = fullData.mutableBytes.assumingMemoryBound(to: Int8.self)
+                if RTMP_SendPacket(self.rtmp,packet, 0) == 1{
+                    packet.deinitialize()
                 }else{
                     print("send sps pps error \(packet)")
                 }
@@ -79,20 +91,29 @@ class JLStreamRTMPEngine: NSObject {
             let fullData: NSMutableData = NSMutableData(bytes: NALUHeader, length: NALUHeader.count)
             fullData.append(data.bytes, length: data.length)
             if RTMP_IsConnected(self.rtmp) == 1{
-                var packet:RTMPPacket =  RTMPPacket.init(m_headerType:  UInt8(RTMP_PACKET_SIZE_LARGE),
-                                                         m_packetType: UInt8(RTMP_PACKET_TYPE_VIDEO),
-                                                         m_hasAbsTimestamp: 0,
-                                                         m_nChannel: 0x04,
-                                                         m_nTimeStamp: timeStamp * 100,
-                                                         m_nInfoField2: self.rtmp.pointee.m_stream_id,
-                                                         m_nBodySize: UInt32(fullData.length),
-                                                         m_nBytesRead: 0,
-                                                         m_chunk: nil,
-                                                         m_body: UnsafeMutablePointer<Int8>(OpaquePointer(fullData.bytes)))
-        
-                if RTMP_SendPacket(self.rtmp,UnsafeMutablePointer<RTMPPacket>(&packet), 0) == 1{
-                    
-                    
+//                var packet:RTMPPacket =  RTMPPacket.init(m_headerType:  UInt8(RTMP_PACKET_SIZE_LARGE),
+//                                                         m_packetType: UInt8(RTMP_PACKET_TYPE_VIDEO),
+//                                                         m_hasAbsTimestamp: 0,
+//                                                         m_nChannel: 0x04,
+//                                                         m_nTimeStamp:timeStamp * 100,
+//                                                         m_nInfoField2: self.rtmp.pointee.m_stream_id,
+//                                                         m_nBodySize: UInt32(fullData.length),
+//                                                         m_nBytesRead: 0,
+//                                                         m_chunk: nil,
+//                                                         m_body: UnsafeMutablePointer<Int8>(OpaquePointer(fullData.bytes)))
+                let packet = UnsafeMutablePointer<RTMPPacket>.allocate(capacity: 1)
+                RTMPPacket_Alloc(packet,1024*64)
+                RTMPPacket_Reset(packet)
+                packet.pointee.m_headerType = UInt8(RTMP_PACKET_SIZE_MEDIUM)
+                packet.pointee.m_packetType = UInt8(RTMP_PACKET_TYPE_VIDEO)
+                packet.pointee.m_hasAbsTimestamp = 0
+                packet.pointee.m_nTimeStamp = timeStamp
+                packet.pointee.m_nInfoField2 = self.rtmp.pointee.m_stream_id
+                packet.pointee.m_nChannel = 0x04
+                packet.pointee.m_nBodySize = UInt32(fullData.length)
+                packet.pointee.m_body = fullData.mutableBytes.assumingMemoryBound(to: Int8.self)
+                if RTMP_SendPacket(self.rtmp,packet, 0) == 1{
+                    packet.deinitialize()
                 }else{
                     print("send idr error \(packet)")
                 }
