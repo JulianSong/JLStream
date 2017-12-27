@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     var videoCapturer:JLStreamVideoCapturer?
-    
+    let rn:JLStreamRTMPEngine = JLStreamRTMPEngine.init()
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle:nibBundleOrNil)
     }
@@ -22,6 +22,18 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.videoCapturer = JLStreamVideoCapturer.init(withView: self.view)
+        let button = UIButton()
+        button.setTitle("Connect", for:.normal)
+        self.view .addSubview(button)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        button.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        button.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10).isActive = true
+        button.backgroundColor = UIColor.orange
+        button.addTarget(self, action: #selector(ViewController.connectAtion), for: UIControlEvents.touchUpInside)
+        
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -30,11 +42,10 @@ class ViewController: UIViewController {
         self.videoCapturer?.start()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    @objc func connectAtion(){
+        self.videoCapturer?.encoder.rtmp.crete()
 
+    }
 
 }
 

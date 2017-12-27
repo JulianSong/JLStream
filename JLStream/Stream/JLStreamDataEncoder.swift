@@ -121,7 +121,6 @@ class JLStreamDataEncoder: NSObject{
             VTSessionSetProperty(self.session!, kVTCompressionPropertyKey_AverageBitRate, width * height * 2 * 32 as CFTypeRef)
             VTSessionSetProperty(self.session!, kVTCompressionPropertyKey_DataRateLimits, [width * height * 2 * 4, 1] as CFArray)
             VTCompressionSessionPrepareToEncodeFrames(self.session!)
-            self.rtmp.crete()
         }else{
             
         }
@@ -148,12 +147,11 @@ class JLStreamDataEncoder: NSObject{
             guard let imgaeBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
                 return
             }
-            let encodeInfoFlags = UnsafeMutablePointer<VTEncodeInfoFlags>.allocate(capacity: 1)
             if CVPixelBufferLockBaseAddress(imgaeBuffer,CVPixelBufferLockFlags.init(rawValue: 0)) == kCVReturnSuccess {
                 //            let presentationTimestamp = CMTime.init(value: 20, timescale: 30)
                 let presentationTimestamp = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
 //                let duration = CMSampleBufferGetOutputDuration(sampleBuffer)
-                VTCompressionSessionEncodeFrame(self.session!,imgaeBuffer,presentationTimestamp,kCMTimeInvalid,nil,nil,encodeInfoFlags)
+                VTCompressionSessionEncodeFrame(self.session!,imgaeBuffer,presentationTimestamp,kCMTimeInvalid,nil,nil,nil)
 //                VTCompressionSessionCompleteFrames(self.session!, kCMTimeInvalid)
             }
             CVPixelBufferUnlockBaseAddress(imgaeBuffer,CVPixelBufferLockFlags.init(rawValue: 0))
