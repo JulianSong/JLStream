@@ -37,6 +37,7 @@ class JLStreamRTMPEngine: NSObject {
         }
     }
     
+    
     fileprivate var NALUHeader: [UInt8] = [0, 0, 0, 1]
     func send(spsData:NSData,ppsData:NSData) {
         self.sendQueue.sync {
@@ -57,16 +58,21 @@ class JLStreamRTMPEngine: NSObject {
     }
     
     func send(data:NSData,timeStamp:UInt32){
-        let mbody = UnsafeMutableRawPointer.allocate(bytes: data.length, alignedTo: MemoryLayout<Int8>.alignment)
-        mbody.copyBytes(from: data.bytes, count: data.length)
+        if self.rtmp == nil{
+            self.setupRTMP()
+            return
+        }
+        let length = data.length
         if RTMP_IsConnected(self.rtmp) == 1{
-            let packetRaw:RTMPPacket =  RTMPPacket.init(m_headerType:  UInt8(RTMP_PACKET_SIZE_LARGE),
+            let mbody = UnsafeMutableRawPointer.allocate(bytes: data.length, alignedTo: MemoryLayout<Int8>.alignment)
+            mbody.copyBytes(from: data.bytes, count:length)
+            let packetRaw:RTMPPacket =  RTMPPacket.init(m_headerType:  UInt8(RTMP_PACKET_SIZE_MEDIUM),
                                                         m_packetType: UInt8(RTMP_PACKET_TYPE_VIDEO),
                                                         m_hasAbsTimestamp: 0,
                                                         m_nChannel: 0x04,
                                                         m_nTimeStamp:timeStamp,
                                                         m_nInfoField2: self.rtmp.pointee.m_stream_id,
-                                                        m_nBodySize: UInt32(data.length),
+                                                        m_nBodySize: UInt32(length),
                                                         m_nBytesRead: 0,
                                                         m_chunk: nil,
                                                         m_body:mbody.assumingMemoryBound(to: Int8.self)
@@ -78,9 +84,9 @@ class JLStreamRTMPEngine: NSObject {
             }
             packet.deinitialize(count: 1)
             packet.deallocate(capacity: 1)
-            mbody.deallocate(bytes: data.length, alignedTo: MemoryLayout<Int8>.alignment)
+            mbody.deallocate(bytes:length, alignedTo: MemoryLayout<Int8>.alignment)
         }else {
-            
+            self.setupRTMP()
         }
     }
 }

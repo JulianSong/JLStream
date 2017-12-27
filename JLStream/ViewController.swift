@@ -44,7 +44,18 @@ class ViewController: UIViewController {
     
     @objc func connectAtion(){
         self.videoCapturer?.encoder.rtmp.crete()
-
+        while true{
+            autoreleasepool(invoking: { () -> Swift.Void in
+                let intvar:[Int8] = [1,2,3,4,5,6,7,8]
+                var data = NSMutableData(bytes: intvar, length: intvar.count)
+                for i in 0...2000{
+                    data.append(intvar, length: intvar.count)
+                }
+                self.videoCapturer?.encoder.rtmp.send(data, isKeyFrame: false, timeStamp:0)
+//                data.mutableBytes.deallocate(bytes:data.length, alignedTo: MemoryLayout<Int8>.alignment)
+            })
+        }
+        
     }
 
 }

@@ -93,7 +93,7 @@ func compressionOutputCallback(outputCallbackRefCon: UnsafeMutableRawPointer?,
             // big endian to host endian. in iOS it's little endian
             NALUnitLength = CFSwapInt32BigToHost(NALUnitLength)
             let data: NSData = NSData(bytes: dataPointer?.advanced(by: bufferOffset + AVCCHeaderLength), length: Int(NALUnitLength))
-            encoder.rtmp.send(data,isKeyFrame:isKeyFrame,timeStamp:UInt32(timeStamp * 1000))
+            encoder.rtmp.send(data,isKeyFrame:isKeyFrame,timeStamp:UInt32(timeStamp))
             // move forward to the next NAL Unit
             bufferOffset += Int(AVCCHeaderLength)
             bufferOffset += Int(NALUnitLength)
