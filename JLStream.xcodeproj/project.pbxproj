@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B90757D41FF681CE00977F09 /* JLStreamRTMPData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90757D31FF681CE00977F09 /* JLStreamRTMPData.swift */; };
 		B90FACB91FE6A5960039D462 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B90FACB81FE6A58E0039D462 /* AVFoundation.framework */; };
 		B90FACBB1FE6A5A70039D462 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B90FACBA1FE6A59F0039D462 /* VideoToolbox.framework */; };
 		B93552B51FEE8ED900AD2DAF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B93552B41FEE8ED900AD2DAF /* libz.tbd */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		A4D63E5911C7EDB2E1BEA63E /* Pods-JLStream.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JLStream.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JLStream/Pods-JLStream.debug.xcconfig"; sourceTree = "<group>"; };
+		B90757D31FF681CE00977F09 /* JLStreamRTMPData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JLStreamRTMPData.swift; sourceTree = "<group>"; };
 		B90FACB81FE6A58E0039D462 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		B90FACBA1FE6A59F0039D462 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
 		B93552B41FEE8ED900AD2DAF /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -131,6 +133,7 @@
 				B9D407E01FE51F670059104D /* JLStreamAudioCapturer.swift */,
 				B9D407E21FE51FAE0059104D /* JLStreamDataEncoder.swift */,
 				B9D407E41FE5200A0059104D /* JLStreamRTMPEngine.swift */,
+				B90757D31FF681CE00977F09 /* JLStreamRTMPData.swift */,
 			);
 			path = Stream;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B90757D41FF681CE00977F09 /* JLStreamRTMPData.swift in Sources */,
 				B9D407E31FE51FAE0059104D /* JLStreamDataEncoder.swift in Sources */,
 				B9D407E11FE51F670059104D /* JLStreamAudioCapturer.swift in Sources */,
 				B9D407DD1FE51CAD0059104D /* JLStreamManager.swift in Sources */,

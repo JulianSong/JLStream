@@ -22,17 +22,33 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.videoCapturer = JLStreamVideoCapturer.init(withView: self.view)
-        let button = UIButton()
-        button.setTitle("Connect", for:.normal)
-        self.view .addSubview(button)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        button.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        button.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10).isActive = true
-        button.backgroundColor = UIColor.orange
-        button.addTarget(self, action: #selector(ViewController.connectAtion), for: UIControlEvents.touchUpInside)
+        do{
+            let button = UIButton()
+            button.setTitle("Connect", for:.normal)
+            self.view .addSubview(button)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant:10).isActive = true
+            button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+            button.rightAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -5).isActive = true
+            button.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10).isActive = true
+            button.backgroundColor = UIColor.orange
+            button.layer.cornerRadius = 8
+            button.addTarget(self, action: #selector(ViewController.connectAtion), for: UIControlEvents.touchUpInside)
+        }
         
+        do{
+            let button = UIButton()
+            button.setTitle("Send", for:.normal)
+            self.view .addSubview(button)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.leftAnchor.constraint(equalTo: self.view.centerXAnchor, constant:5).isActive = true
+            button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+            button.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -10).isActive = true
+            button.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10).isActive = true
+            button.backgroundColor = UIColor.red
+            button.layer.cornerRadius = 8
+            button.addTarget(self, action: #selector(ViewController.sendAtion), for: UIControlEvents.touchUpInside)
+        }
         
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -42,21 +58,12 @@ class ViewController: UIViewController {
         self.videoCapturer?.start()
     }
     
-    @objc func connectAtion(){
-        self.videoCapturer?.encoder.rtmp.crete()
-        while true{
-            autoreleasepool(invoking: { () -> Swift.Void in
-                let intvar:[Int8] = [1,2,3,4,5,6,7,8]
-                var data = NSMutableData(bytes: intvar, length: intvar.count)
-                for i in 0...2000{
-                    data.append(intvar, length: intvar.count)
-                }
-                self.videoCapturer?.encoder.rtmp.send(data, isKeyFrame: false, timeStamp:0)
-//                data.mutableBytes.deallocate(bytes:data.length, alignedTo: MemoryLayout<Int8>.alignment)
-            })
-        }
-        
+    @objc func connectAtion() {
+        self.videoCapturer?.encoder.rtmp.crete("rtmp://192.168.31.209:1935/rtmplive/room")
     }
 
+    @objc func sendAtion() {
+        self.videoCapturer?.encoder.rtmp.startPush()
+    }
 }
 

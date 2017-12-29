@@ -82,22 +82,20 @@ func compressionOutputCallback(outputCallbackRefCon: UnsafeMutableRawPointer?,
     let presentationTimestamp = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
     
     let timeStamp:Int64 =  Int64(presentationTimestamp.value) / Int64(presentationTimestamp.timescale)
-    print("timeStamp is \(timeStamp)")
+
     if CMBlockBufferGetDataPointer(dataBuffer, 0, &lengthAtOffset, &totalLength, &dataPointer) == noErr {
         var bufferOffset: Int = 0
         let AVCCHeaderLength = 4
         while bufferOffset < (totalLength - AVCCHeaderLength) {
-            var NALUnitLength: UInt32 = 0
-            // first four character is NALUnit length
+            var NALUnitLength: UInt32 = 0            // first four character is NALUnit length
             memcpy(&NALUnitLength, dataPointer?.advanced(by: bufferOffset), AVCCHeaderLength)
             // big endian to host endian. in iOS it's little endian
             NALUnitLength = CFSwapInt32BigToHost(NALUnitLength)
-            let data: NSData = NSData(bytes: dataPointer?.advanced(by: bufferOffset + AVCCHeaderLength), length: Int(NALUnitLength))
+            let data: NSData = NSData(bytes:dataPointer?.advanced(by: bufferOffset + AVCCHeaderLength), length: Int(NALUnitLength))
             encoder.rtmp.send(data,isKeyFrame:isKeyFrame,timeStamp:UInt32(timeStamp))
-            // move forward to the next NAL Unit
-            bufferOffset += Int(AVCCHeaderLength)
-            bufferOffset += Int(NALUnitLength)
+            bufferOffset += Int(AVCCHeaderLength) + Int(NALUnitLength)
         }
+        
     }
 }
 
@@ -142,8 +140,8 @@ class JLStreamDataEncoder: NSObject{
     }
     
     func encode(_ sampleBuffer:CMSampleBuffer){
-        self.encodeQueue.sync {
-            
+//        self.encodeQueue.sync {
+        
             guard let imgaeBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
                 return
             }
@@ -157,6 +155,6 @@ class JLStreamDataEncoder: NSObject{
             CVPixelBufferUnlockBaseAddress(imgaeBuffer,CVPixelBufferLockFlags.init(rawValue: 0))
 
         
-        }
+//        }
     }
 }
