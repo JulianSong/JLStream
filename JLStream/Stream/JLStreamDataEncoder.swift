@@ -140,8 +140,7 @@ class JLStreamDataEncoder: NSObject{
     }
     
     func encode(_ sampleBuffer:CMSampleBuffer){
-//        self.encodeQueue.sync {
-        
+        self.encodeQueue.async {
             guard let imgaeBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
                 return
             }
@@ -155,6 +154,6 @@ class JLStreamDataEncoder: NSObject{
             CVPixelBufferUnlockBaseAddress(imgaeBuffer,CVPixelBufferLockFlags.init(rawValue: 0))
 
         
-//        }
+        }
     }
 }

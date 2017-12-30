@@ -9,8 +9,8 @@
 import UIKit
 
 class JLStreamRTMPData: NSObject {
-    var  NAULData:NSData!
-    var timeStamp:UInt32!
+    var  NAULData:NSData?
+    var timeStamp:UInt32 = 0
     init(NAULData:NSData, timeStamp:UInt32) {
         super.init()
         self.NAULData = NAULData

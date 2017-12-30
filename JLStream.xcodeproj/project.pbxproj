@@ -72,6 +72,8 @@
 		052989357606F52A2675E211 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B9DB10541FEE86F70088DFD3 /* librtmp.framework */,
+				B9DB10551FEE86F80088DFD3 /* openssl.framework */,
 				B93552B41FEE8ED900AD2DAF /* libz.tbd */,
 				B9DB104F1FEE79420088DFD3 /* openssl.framework */,
 				B90FACBA1FE6A59F0039D462 /* VideoToolbox.framework */,
@@ -94,8 +96,6 @@
 			isa = PBXGroup;
 			children = (
 				B9DB10581FEE87E50088DFD3 /* Bridging-Header.h */,
-				B9DB10541FEE86F70088DFD3 /* librtmp.framework */,
-				B9DB10551FEE86F80088DFD3 /* openssl.framework */,
 				B9D407C61FE5158C0059104D /* JLStream */,
 				B9D407C51FE5158C0059104D /* Products */,
 				1A36288AC8CB7A07F7D146D2 /* Pods */,
